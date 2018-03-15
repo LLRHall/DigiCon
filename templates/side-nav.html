@@ -11,8 +11,8 @@
 
     	<div class="sidebar-wrapper">
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text">
-                    Creative Tim
+                <a class="simple-text">
+                    $APPNAME
                 </a>
             </div>
 
@@ -52,8 +52,9 @@
     	</div>
     </div>
 
+    <!-- Highlight the selected tab -->
     <script type="text/javascript">
         var url =  $(location).attr('pathname');
         $("li.active")[0].className="";
         $("a[href='" + url + "']")[0].parentElement.className="active";
-        </script>
+    </script>
