@@ -12,7 +12,42 @@ def index():
 
 @app.route("/history")
 def history():
-    return render_template('history.html')
+    kwargs = {}
+    scans = [
+        {
+            'id': '2018-03-17T17:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+        {
+            'id': '2018-03-17T16:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+        {
+            'id': '2018-03-17T12:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+        {
+            'id': '2018-03-12T17:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+        {
+            'id': '2018-02-17T17:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+        {
+            'id': '2017-03-17T17:40:42.907425',
+            'original_filename': 'somefilename.png',
+            'output': 'outputfilename.png',
+        },
+    ]
+
+    kwargs['scans'] = scans
+    return render_template('history.html', **kwargs)
 
 @app.route("/insights")
 def insights():
