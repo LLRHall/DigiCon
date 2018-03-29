@@ -11,8 +11,7 @@ from werkzeug.utils import secure_filename
 from aws import aws_fileupload, aws_read, replace
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-
-UPLOAD_FOLDER = CUR_DIR + '/uploads'
+UPLOAD_FOLDER = CUR_DIR + '/static/files/uploads'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -25,31 +24,32 @@ def index():
 @app.route("/uploadfile", methods=['POST'])
 def uploadfile():
     # check if the post request has the file part
-    print (request.files)
-    if 'file' not in request.files:
-
-        raise Exception('No file part')
-        return redirect(request.url)
-    file = request.files['file']
-    # if user does not select file, browser also
-    # submit a empty part without filename
-    if file.filename == '':
-        raise Exception('No selected file')
-        return redirect(request.url)
-    if file:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return (filename, 200)
-
+    files = request.files.getlist("file[]")
+    # if 'file' not in request.files:
+    #     raise Exception('No file part')
+    #     return redirect(request.url)
+    for file in files:
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            raise Exception('No selected file')
+            return redirect(request.url)
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return ('success', 200)
 
 @app.route("/processfile/<filename>")
 def processfile(filename):
-    aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
-    aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
+    try:
+        aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
+        aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
 
-    replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
+        replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
+        return (filename, 200)
+    except Exception:
+        return (filename, 500)
 
-    return aws_result
 
 @app.route("/history")
 def history():

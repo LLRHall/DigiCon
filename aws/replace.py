@@ -43,8 +43,8 @@ def render_text(txt):
 
 
 def replace(text,img):
-	print(len(text))
-	print(text)
+	# print(len(text))
+	# print(text)
 	rows, cols = img.shape[:2]
 	boxes = {}
 	box_id = 0
@@ -88,7 +88,7 @@ def replace(text,img):
 		cur_y_min = boxes[key][2]
 		cur_y_max = boxes[key][3]
 		cur_text = boxes[key][5]
-		print(cur_text)
+		# print(cur_text)
 		# print(cur_x_min,cur_x_max,cur_y_min,cur_y_max)
 		img_cur_regn = img_new[cur_y_min:cur_y_max,cur_x_min:cur_x_max]
 		# show_img(img_cur_regn)
@@ -123,5 +123,3 @@ def main(aws_result_json, filename, UPLOAD_FOLDER):
 	replace(aws_result_json["TextDetections"],img)
 	RESULT_FOLDER = UPLOAD_FOLDER.rstrip('uploads') + 'results'
 	cv2.imwrite(os.path.join(RESULT_FOLDER, filename), img)
-	# show_img(img)
-	# cv2.destroyAllWindows()
