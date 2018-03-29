@@ -49,7 +49,7 @@
                             <button id="upload-file-btn" type="button">Upload</button>
                         </fieldset>
                     </form> -->
-                    
+
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
                             <div class="drop">
@@ -59,7 +59,7 @@
                                         Drag & Drop
                                     </div>
                                       <div class="desc">
-                                        your files to Assets, or 
+                                        your files to Assets, or
                                     </div>
                                     <div class="browse">
                                         click here to browse
@@ -67,12 +67,12 @@
                                 </div>
                                 <output id="list"></output>
                                 <form  id="upload-file" method="post" enctype="multipart/form-data">
-                                    <input id="files" multiple="true" name="file" type="file" />
-                                </form>     
+                                    <input id="files" multiple="true" name="file[]" type="file" />
+                                </form>
                             </div>
                         </div>
                         <div class="col-md-1"></div>
-                    
+
                 </div>
             </div>
         </div>
@@ -155,27 +155,33 @@
                     })(f);
                     // console.log("Dad");
                     console.log(f);
-                    var form_data = new FormData($('#upload-file')[i]);
                     // Read in the image file as a data URL.
                     reader.readAsDataURL(f);
-                    $.ajax({
-                        type: 'POST',
-                        url: '/uploadfile',
-                        data: form_data,
-                        contentType: false,
-                        cache: false,
-                        processData: false,
-                        async: false,
-                        success: function(data) {
-                            console.log(data);
-                            filename = data.substring(0, data.lastIndexOf('.'));
-                            alert('file '+ filename + ' uploaded')
-                        },
-                    });
-                    
-            
+
                 }
+
+                var form_data = new FormData($('#upload-file')[0]);
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/uploadfile',
+                    data: form_data,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    async: false,
+                    success: function(data) {
+                        console.log(data);
+                        filename = data.substring(0, data.lastIndexOf('.'));
+                        alert('file '+ filename + ' uploaded')
+                    },
+                });
+
+
+
             }
+
 
             $('#files').change(handleFileSelect);
 
@@ -205,9 +211,9 @@
             // //             },
             // //         });
             // //     }
-                
+
             // });
-        
+
 
         });
     </script>

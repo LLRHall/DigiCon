@@ -25,21 +25,20 @@ def index():
 @app.route("/uploadfile", methods=['POST'])
 def uploadfile():
     # check if the post request has the file part
-    print request.files
-    if 'file' not in request.files:
-
-        raise Exception('No file part')
-        return redirect(request.url)
-    file = request.files['file']
-    # if user does not select file, browser also
-    # submit a empty part without filename
-    if file.filename == '':
-        raise Exception('No selected file')
-        return redirect(request.url)
-    if file:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return (filename, 200)
+    files = request.files.getlist("file[]")
+    # if 'file' not in request.files:
+    #     raise Exception('No file part')
+    #     return redirect(request.url)
+    for file in files:
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            raise Exception('No selected file')
+            return redirect(request.url)
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return (str(len(files)), 200)
 
 
 @app.route("/processfile/<filename>")
@@ -50,6 +49,7 @@ def processfile(filename):
     replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
 
     return aws_result
+
 
 @app.route("/history")
 def history():
