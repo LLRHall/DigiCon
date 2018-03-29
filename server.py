@@ -11,8 +11,7 @@ from werkzeug.utils import secure_filename
 from aws import aws_fileupload, aws_read, replace
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-
-UPLOAD_FOLDER = CUR_DIR + '/uploads'
+UPLOAD_FOLDER = CUR_DIR + '/static/files/uploads'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

@@ -68,15 +68,15 @@
                                         click here to browse
                                     </div>
                                 </div>
-                                
-                                <form  id="upload-file" method="post" enctype="multipart/form-data">
+
+                                <form id="upload-file" method="post" enctype="multipart/form-data">
                                     <input id="files" multiple="true" name="file[]" type="file" />
                                 </form>
                             </div>
                         </div>
                         <div class="col-md-1"></div>
-
                 </div>
+
             </div>
         </div>
 
@@ -110,6 +110,24 @@
 
 
     <script type="text/javascript">
+
+        // String format
+        // First, checks if it isn't implemented yet.
+        if (!String.prototype.format) {
+          String.prototype.format = function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) {
+              return typeof args[number] != 'undefined'
+                ? args[number]
+                : match
+              ;
+            });
+          };
+        }
+
+
+        $('#reloadbutton').hide()
+
         $(document).ready(function(){
             $(".drop").addClass("animated bounceInUp")
             var drop = $(".drop");
@@ -138,7 +156,7 @@
                 var file_ids = [];
                 // Loop through the FileList and render image files as thumbnails.
                 for (var i = 0, f; f = files[i]; i++) {
-                    
+
 
                     // Only process image files.
                     if (!f.type.match('image.*')) {
@@ -154,23 +172,34 @@
                         file_id = file_ids[i];
                         return function(e) {
                             // Render thumbnail.
-                            var span = document.createElement('span');
-                            
-                            // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
-                            span.innerHTML = ["<div class='row' id='"+file_id+"'><img class='thumb' src='", e.target.result,
-                                    "' title='", escape(theFile.name), "'/><img src='/static/assets/loader.svg' class='loader'/>"].join("");
-                            document.getElementById('list').insertBefore(span, null);
-                            
+                            var div = document.createElement('div');
 
-                            
+                            // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
+                            var innerHTML = `
+                                <div style='display: flex; justify-content: space-between;' class='row' id='{0}'>
+                                    <img class='thumb' src='{1}' title='{2}'/>
+                                    <img src='/static/assets/loader.svg' class='loader'/>
+                                    <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success">
+                                      <i class="fa fa-file-text"></i><br/>
+                                      Download Results <br> Document
+                                    </a>
+                                </div>
+                            `
+
+                            div.innerHTML = innerHTML.format(file_id, e.target.result, escape(theFile.name))
+
+                            document.getElementById('list').insertBefore(div, null);
+
                         };
 
+
+
                     })(f);
-                    // $.get("/static/loader.html", function (data) {
+                    // $.get("/static/assets/loader.html", function (data) {
                     //                 $("#"+file_id).html(data);
                     //                 console.log(data);
                     //          });
-                    
+
 
                     // console.log(f);
 
@@ -178,13 +207,13 @@
                     reader.readAsDataURL(f);
 
                 }
-                
+
                 var form_data = new FormData($('#upload-file')[0]);
 
 
                 $.ajax({
                     type: 'POST',
-                    url: '/uploadfile',
+                    url: '/crap-dsdsds-uploadfile',
                     data: form_data,
                     contentType: false,
                     cache: false,
@@ -206,6 +235,7 @@
                 });
 
 
+                $('#reloadbutton').show()
 
             }
 
