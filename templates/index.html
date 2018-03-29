@@ -25,9 +25,11 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="/static/assets/css/pe-icon-7-stroke.css" rel="stylesheet">
     <link href="/static/assets/css/index.css" rel="stylesheet">
+    <!-- <link href="/static/assets/css/loader.css" rel="stylesheet"> -->
     <!-- intro.js-->
     <link href="/static/assets/css/introjs.css" rel="stylesheet">
     <script src="/static/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+    <script src="/static/assets/js/md5.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -52,6 +54,7 @@
 
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
+                            <output id="list"></output>
                             <div class="drop">
                                 <div class="cont">
                                     <i class="fa fa-cloud-upload"></i>
@@ -65,7 +68,7 @@
                                         click here to browse
                                     </div>
                                 </div>
-                                <output id="list"></output>
+                                
                                 <form  id="upload-file" method="post" enctype="multipart/form-data">
                                     <input id="files" multiple="true" name="file[]" type="file" />
                                 </form>
@@ -132,27 +135,42 @@
 
             function handleFileSelect(evt) {
                 var files = evt.target.files; // FileList object
-
+                var file_ids = [];
                 // Loop through the FileList and render image files as thumbnails.
                 for (var i = 0, f; f = files[i]; i++) {
+                    
 
                     // Only process image files.
                     if (!f.type.match('image.*')) {
                         continue;
                     }
-
+                    $(".drop").attr("hidden",true);
                     var reader = new FileReader();
 
                     // Closure to capture the file information.
                     reader.onload = (function(theFile) {
+                        file_ids[i] = md5(theFile.name);
+                        console.log(file_ids[i]);
+                        file_id = file_ids[i];
                         return function(e) {
                             // Render thumbnail.
                             var span = document.createElement('span');
-                            span.innerHTML = ['<div class="row"><img class="thumb" src="', e.target.result,
-                                    '" title="', escape(theFile.name), '"/></div>'].join('');
+                            
+                            // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
+                            span.innerHTML = ["<div class='row' id='"+file_id+"'><img class='thumb' src='", e.target.result,
+                                    "' title='", escape(theFile.name), "'/><img src='/static/assets/loader.svg' class='loader'/>"].join("");
                             document.getElementById('list').insertBefore(span, null);
+                            
+
+                            
                         };
+
                     })(f);
+                    // $.get("/static/loader.html", function (data) {
+                    //                 $("#"+file_id).html(data);
+                    //                 console.log(data);
+                    //          });
+                    
 
                     // console.log(f);
 
@@ -160,7 +178,7 @@
                     reader.readAsDataURL(f);
 
                 }
-
+                
                 var form_data = new FormData($('#upload-file')[0]);
 
 
