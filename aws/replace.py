@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import json
 import math
+import os
 
 def show_img(img):
 	cv2.imshow("img",img)
@@ -43,6 +44,7 @@ def render_text(txt):
 
 def replace(text,img):
 	print(len(text))
+	print(text)
 	rows, cols = img.shape[:2]
 	boxes = {}
 	box_id = 0
@@ -114,9 +116,12 @@ def replace(text,img):
 
 
 
-if __name__ == '__main__':
-	text = read_json("./out.txt")
-	img= cv2.imread("./test_2.jpg")
-	replace(text,img)
-	show_img(img)
-	cv2.destroyAllWindows()
+def main(aws_result_json, filename, UPLOAD_FOLDER):
+	abs_path_upload = os.path.join(UPLOAD_FOLDER, filename)
+	# text = read_json("./out.txt")
+	img= cv2.imread(abs_path_upload)
+	replace(aws_result_json["TextDetections"],img)
+	RESULT_FOLDER = UPLOAD_FOLDER.rstrip('uploads') + 'results'
+	cv2.imwrite(os.path.join(RESULT_FOLDER, filename), img)
+	# show_img(img)
+	# cv2.destroyAllWindows()
