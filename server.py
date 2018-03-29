@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
+import json
 import datetime
 import os
 import threading
 import webbrowser
 from flask import Flask, render_template, session, request, redirect, url_for
 from werkzeug.utils import secure_filename
+
+from aws import aws_fileupload, aws_read, replace
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -38,6 +41,15 @@ def uploadfile():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return (filename, 200)
 
+
+@app.route("/processfile/<filename>")
+def processfile(filename):
+    aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
+    aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
+
+    replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
+
+    return aws_result
 
 @app.route("/history")
 def history():
