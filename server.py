@@ -25,7 +25,7 @@ def index():
 @app.route("/uploadfile", methods=['POST'])
 def uploadfile():
     # check if the post request has the file part
-    print request.files
+    print (request.files)
     if 'file' not in request.files:
 
         raise Exception('No file part')
@@ -56,34 +56,34 @@ def history():
     kwargs = {}
     scans = [
         {
-            'id': '2018-03-17T17:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
+            'id' : '2018-03-17T17:40:42.907425',
+            'patient_name' : 'Writwick Wraj',
+            'original_filename' : 'static/assets/img/uploads/123.jpg',
+            'output': '/uploads/16737-FederationFormat.jpg',
         },
         {
-            'id': '2018-03-17T16:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
+            'id' : '2018-03-17T17:40:42.907425',
+            'patient_name' : 'Writwick Wraj',
+            'original_filename' : 'static/assets/img/uploads/123.jpg',
+            'output': '/uploads/16737-FederationFormat.jpg',
         },
         {
-            'id': '2018-03-17T12:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
+            'id' : '2018-03-17T17:40:42.907425',
+            'patient_name' : 'Writwick Wraj',
+            'original_filename' : 'static/assets/img/uploads/123.jpg',
+            'output': '/uploads/16737-FederationFormat.jpg',
         },
         {
-            'id': '2018-03-12T17:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
+            'id' : '2018-03-17T17:40:42.907425',
+            'patient_name' : 'Writwick Wraj',
+            'original_filename' : 'static/assets/img/uploads/123.jpg',
+            'output': '/uploads/16737-FederationFormat.jpg',
         },
         {
-            'id': '2018-02-17T17:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
-        },
-        {
-            'id': '2017-03-17T17:40:42.907425',
-            'original_filename': 'somefilename.png',
-            'output': 'outputfilename.png',
+            'id' : '2018-03-17T17:40:42.907425',
+            'patient_name' : 'Writwick Wraj',
+            'original_filename' : 'static/assets/img/uploads/123.jpg',
+            'output': '/uploads/16737-FederationFormat.jpg',
         },
     ]
 
