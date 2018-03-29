@@ -9,7 +9,7 @@ button:focus {
 
 #list {
   margin-left: 17px;
-  z-index: 2;
+  /*z-index: 2;*/
    
 }
 .drop {
@@ -86,12 +86,15 @@ button:focus {
   position: absolute;
   left: 0;
   top: 0;
+  overflow-y: scroll;
+  height: 470px;  
   /*border: 1px solid black;*/
 }
 #list .thumb {
   height: 75px;
   border: 1px solid #323a44;
-  margin: 10px 5px 0 0;
+  margin: 10px 5px 8px 0;
+  width: 75px;
 }
 .card-holder{
   padding:5px;
@@ -150,4 +153,15 @@ hr{
 
 .loader {
   margin-left: 10%;
+}
+.processed {
+  margin-left: 10%;
+}
+.columns {
+  width: 30%;
+  padding: 0 0 0 8% !important;
+}
+.card1 {
+  padding: 0;
+  height: 100px;
 }
