@@ -39,8 +39,8 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-
-                    <!-- <form id="upload-file" method="post" enctype="multipart/form-data">
+                  <!--   <output id="list"></output>
+                    <form id="upload-file" method="post" enctype="multipart/form-data">
                         <fieldset>
                             <label for="file">Select Image(s)</label>
                             <input name="file" type="file">
@@ -49,25 +49,30 @@
                             <button id="upload-file-btn" type="button">Upload</button>
                         </fieldset>
                     </form> -->
-                    <div class="col-md-1"></div>
-                    <div class="col-md-10">
-                        <div class="drop">
-                            <div class="cont">
-                                <i class="fa fa-cloud-upload"></i>
-                                <div class="tit">
-                                    Drag & Drop
+                    
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div class="drop">
+                                <div class="cont">
+                                    <i class="fa fa-cloud-upload"></i>
+                                    <div class="tit">
+                                        Drag & Drop
+                                    </div>
+                                      <div class="desc">
+                                        your files to Assets, or 
+                                    </div>
+                                    <div class="browse">
+                                        click here to browse
+                                    </div>
                                 </div>
-                                <div class="desc">
-                                    your files to Assets, or 
-                                </div>
-                                <div class="browse">
-                                    click here to browse
-                                </div>
+                                <output id="list"></output>
+                                <form  id="upload-file" method="post" enctype="multipart/form-data">
+                                    <input id="files" multiple="true" name="file" type="file" />
+                                </form>     
                             </div>
-                            <output id="list"></output><input id="files" multiple="true" name="files[]" type="file" />
                         </div>
-                    </div>
-                    <div class="col-md-1"></div>
+                        <div class="col-md-1"></div>
+                    
                 </div>
             </div>
         </div>
@@ -143,18 +148,66 @@
                         return function(e) {
                             // Render thumbnail.
                             var span = document.createElement('span');
-                            span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                    '" title="', escape(theFile.name), '"/>'].join('');
+                            span.innerHTML = ['<div class="row"><img class="thumb" src="', e.target.result,
+                                    '" title="', escape(theFile.name), '"/></div>'].join('');
                             document.getElementById('list').insertBefore(span, null);
                         };
                     })(f);
-
+                    // console.log("Dad");
+                    console.log(f);
+                    var form_data = new FormData($('#upload-file')[i]);
                     // Read in the image file as a data URL.
                     reader.readAsDataURL(f);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/uploadfile',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        async: false,
+                        success: function(data) {
+                            console.log(data);
+                            filename = data.substring(0, data.lastIndexOf('.'));
+                            alert('file '+ filename + ' uploaded')
+                        },
+                    });
+                    
+            
                 }
             }
 
             $('#files').change(handleFileSelect);
+
+            // // $('#upload-file-btn').click(function() {
+            // //         // Loop through the FileList and render image files as thumbnails.
+            // //     for (var i = 0, f; f = $('#upload-file')[i]; i++) {
+
+            // //         // var filename = $('#upload-file').val().split('\\').pop();
+            // //         var form_data = new FormData($('#upload-file')[i]);
+            // //         // console.log(form_data.name);
+            // //         var span = document.createElement('span');
+            // // //                 span.innerHTML = ['<div class="row"><img class="thumb" src="', e.target.result,
+            // // //                         '" title="', escape(theFile.name), '"/></div>'].join('');
+            // // //                 document.getElementById('list').insertBefore(span, null);
+            // //         $.ajax({
+            // //             type: 'POST',
+            // //             url: '/uploadfile',
+            // //             data: form_data,
+            // //             contentType: false,
+            // //             cache: false,
+            // //             processData: false,
+            // //             async: false,
+            // //             success: function(data) {
+            // //                 console.log(data);
+            // //                 filename = data.substring(0, data.lastIndexOf('.'));
+            // //                 alert('file '+ filename + ' uploaded')
+            // //             },
+            // //         });
+            // //     }
+                
+            // });
+        
 
         });
     </script>

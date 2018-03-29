@@ -22,7 +22,9 @@ def index():
 @app.route("/uploadfile", methods=['POST'])
 def uploadfile():
     # check if the post request has the file part
+    print request.files
     if 'file' not in request.files:
+
         raise Exception('No file part')
         return redirect(request.url)
     file = request.files['file']
@@ -34,7 +36,7 @@ def uploadfile():
     if file:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return ('', 200)
+        return (filename, 200)
 
 
 @app.route("/history")
