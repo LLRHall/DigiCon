@@ -7,6 +7,8 @@ import webbrowser
 from flask import Flask, render_template, session, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
+from aws import aws_fileupload, aws_read
+
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 UPLOAD_FOLDER = CUR_DIR + '/uploads'
@@ -35,6 +37,12 @@ def uploadfile():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return ('', 200)
+
+
+@app.route("/processfile/<filename>")
+def processfile(filename):
+    aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
+    return aws_read.file_read(filename, UPLOAD_FOLDER)
 
 
 @app.route("/history")
