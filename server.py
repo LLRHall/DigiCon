@@ -38,17 +38,19 @@ def uploadfile():
         if file:
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return (str(len(files)), 200)
+    return ('success', 200)
 
 
 @app.route("/processfile/<filename>")
 def processfile(filename):
-    aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
-    aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
+    try:
+        aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
+        aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
 
-    replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
-
-    return aws_result
+        replace.main(json.loads(aws_result), filename, UPLOAD_FOLDER)
+        return (filename, 200)
+    except Exception:
+        return (filename, 500)
 
 
 @app.route("/history")

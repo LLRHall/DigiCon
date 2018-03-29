@@ -153,8 +153,9 @@
                             document.getElementById('list').insertBefore(span, null);
                         };
                     })(f);
-                    // console.log("Dad");
-                    console.log(f);
+
+                    // console.log(f);
+
                     // Read in the image file as a data URL.
                     reader.readAsDataURL(f);
 
@@ -172,9 +173,17 @@
                     processData: false,
                     async: false,
                     success: function(data) {
-                        console.log(data);
-                        filename = data.substring(0, data.lastIndexOf('.'));
-                        alert('file '+ filename + ' uploaded')
+                        if (data == 'success') {
+                            for (var i = files.length - 1; i >= 0; i--) {
+                                $.get('/processfile/' + files[i].name, function(filename, status) {
+                                    console.log('Done with ', filename);
+                                })
+                            }
+                        } else {
+                            alert('Error in file upload. Please try again!');
+                        }
+                        // filename = data.substring(0, data.lastIndexOf('.'));
+                        // alert('file '+ filename + ' uploaded')
                     },
                 });
 
