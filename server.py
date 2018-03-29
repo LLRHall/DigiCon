@@ -5,8 +5,10 @@ import datetime
 import os
 import threading
 import webbrowser
+import requests
 from flask import Flask, render_template, session, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from json2html import *
 
 from aws import aws_fileupload, aws_read, replace
 
@@ -91,9 +93,38 @@ def history():
     kwargs['scans'] = scans
     return render_template('history.html', **kwargs)
 
-@app.route("/insights")
+@app.route("/insights",methods=['GET', 'POST'])
 def insights():
-    return render_template('insights.html')
+    token = '71c4161312f0f36b120f80f4b015717bee72c4e337fc4800840786fa50102ccb'
+    if request.method == 'POST':
+        query = request.form['query']
+        r = requests.get("http://www.healthos.co/api/v1/autocomplete/medicines/brands/"+query,headers={'Authorization': 'Bearer '+token})
+        parsed = json.loads(r.content)
+        for element in parsed:
+            del element['medicine_id']
+            del element['id']
+            del element['search_score']
+        # print (json.dumps(parsed, indent=4, sort_keys=True))
+        f = open("templates/template.html", "r")
+        contents = f.readlines()
+        f.close()
+        cssname="""<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
+        contents.insert(39,json2html.convert(json = parsed))
+        contents.insert(27,cssname)
+        # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
+        # ans=""
+        # for x in contents:
+        #     ans+=x;
+        #     ans+='\n'
+        f = open("templates/new.html", "w")
+        contents = "".join(contents)
+        f.write(contents)
+        f.close()
+
+        # print(ans)
+        return render_template('new.html')
+    else:
+        return render_template('insights.html')
 
 @app.route("/about")
 def about():
