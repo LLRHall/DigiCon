@@ -290,6 +290,10 @@ def feedback():
         idnum = request.form['idnum']
         phone = request.form['phone']
         feedbacktext = request.form['feedbacktext']
+        
+        if not os.path.exists('feedbacks'):
+            os.makedirs('feedbacks')
+
         f = open("feedbacks/"+name+".txt", "wb")
         f.write(("Name ->"+name+'\n').encode('utf-8'))
         f.write(("email ->"+email+'\n').encode('utf-8'))
