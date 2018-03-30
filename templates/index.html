@@ -54,7 +54,7 @@
 
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
-                            <output id="list"></output>
+                            <output id="list" class="box"></output>    
                             <div class="drop">
                                 <div class="cont">
                                     <i class="fa fa-cloud-upload"></i>
@@ -129,7 +129,7 @@
         $('#reloadbutton').hide()
 
         $(document).ready(function(){
-            $(".drop").addClass("animated bounceInUp")
+            $(".drop").addClass("animated fadeIn")
             var drop = $(".drop");
             drop.on('dragenter', function (e) {
                 $(".drop").css({
@@ -153,7 +153,7 @@
 
             function handleFileSelect(evt) {
                 var files = evt.target.files; // FileList object
-                var file_ids = [];
+                // var file_ids = [];
                 // Loop through the FileList and render image files as thumbnails.
                 for (var i = 0, f; f = files[i]; i++) {
 
@@ -167,22 +167,37 @@
 
                     // Closure to capture the file information.
                     reader.onload = (function(theFile) {
-                        file_ids[i] = md5(theFile.name);
-                        console.log(file_ids[i]);
-                        file_id = file_ids[i];
+                        // file_ids[i] = md5(theFile.name);
+                        
+                        // file_id = file_ids[i];
+                        // setTimeout(() => {console.log("test")},3000);
                         return function(e) {
                             // Render thumbnail.
                             var div = document.createElement('div');
 
+                            file_id = md5(theFile.name);
                             // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
                             var innerHTML = `
-                                <div style='display: flex; justify-content: space-between;' class='row' id='{0}'>
-                                    <img class='thumb' src='{1}' title='{2}'/>
-                                    <img src='/static/assets/loader.svg' class='loader'/>
-                                    <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success">
-                                      <i class="fa fa-file-text"></i><br/>
-                                      Download Results <br> Document
-                                    </a>
+                                <div class='card card1' id='{0}'>
+                                    
+                                    <div class='card-body'>
+                                        <div style='display: flex; align-items: center; ' >
+                                            <div class='columns'>
+                                            <img class='thumb' src='{1}' title='{2}'/>
+                                            </div>
+                                            <div class='columns'>
+                                            <img src='/static/assets/loader.svg' class='loader'/>
+                                            <img src='/static/assets/processed.svg' class='processed' hidden=true/>
+
+                                            </div>
+                                            <div class='columns'>
+                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success" disabled>
+                                              <i class="fa fa-file-text"></i><br/>
+                                              Download Results <br> Document
+                                            </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             `
 
@@ -213,7 +228,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/crap-dsdsds-uploadfile',
+                    url: '/uploadfile',
                     data: form_data,
                     contentType: false,
                     cache: false,
@@ -224,6 +239,12 @@
                             for (var i = files.length - 1; i >= 0; i--) {
                                 $.get('/processfile/' + files[i].name, function(filename, status) {
                                     console.log('Done with ', filename);
+                                    var file_id = md5(filename);
+                                    console.log(file_id+"    "+filename);
+                                    $("#"+file_id+" .loader").attr("hidden",true);
+                                    $("#"+file_id+" .processed").removeAttr("hidden");
+                                    $("#"+file_id+" .processed").removeAttr("disabled");
+
                                 })
                             }
                         } else {

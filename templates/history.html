@@ -46,28 +46,53 @@
                 </div>
                 <br>
                 <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10 box">
-                                <h2>Recently Scanned Files</h2>
-                                {% for item in scans %}
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10 box row">
+                            <h2 class="col-md-12">Recently Scanned Files</h2>
+                            {% for item in scans %}
+                            <div class="card-holder col-md-6 col-sm-12">
                                 <div class="card">
-                                    <h3 class="card-header">Patient Name</h3>
-                                    <div class="card-body">Original File</div>
+                                    <h3 class="card-header">{{item.patient_name}}</h3><hr />
+                                    <!-- <div class="card-body">Original File</div> -->
+                                    <div class="imgCont row" style="padding:10px;">
+                                        <div class="col-md-12 filetab" onclick="openModal('{{item.original_filename}}')">
+                                            <h4>Original File</h4>
+                                        </div>
+                                        <div class="col-md-12 filetab" onclick="openModal('{{item.output}}')">
+                                            <h4>Output File</h3>
+                                        </div>
+                                    </div>
                                     <div style="display: flex; justify-content: flex-end;">
                                         <div class="card-footer"><i class="fa fa-clock-o"></i> <span class="time-ago">{{item.id}}</span></div>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        </div>
-                        <div class="col-md-1"></div>
-
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-1"></div>
                 </div>
             </div>
         </div>
 
         {% include 'footer.html' %}
+        
 
-
+    </div>
+</div>
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+            </div>
+            <div class="modal-body">
+                <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -95,11 +120,15 @@
                 _datetimestamps[i].innerHTML = moment(_datetimestamps[i].innerHTML).fromNow()
             }
             // $(".box .card").each(function(i){
-            //     $(this).delay(10000*i).addClass("animated bounceInUp");
+            //     $(".card:nth-child("+i+")").delay(10000*i).addClass("animated bounceInUp");
             // });
             $(".card").addClass("animated bounceInUp")
         });
-        
+        function openModal(src){
+            console.log("hello");
+            $('#imagepreview').attr('src', src); // here asign the image to the modal when the user click the enlarge link
+            $('#imagemodal').modal('show'); 
+        }
         
     </script>
 
