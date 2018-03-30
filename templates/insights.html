@@ -25,7 +25,11 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="/static/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
 		<script src="/static/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
-
+<style>
+input[type=submit] {
+    width: 10em;  height: 3em;
+}
+</style>
 </head>
 <body>
 
@@ -37,15 +41,25 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST">
-                    This is a place where you can get insights into any medicine, disease and laboratory tests.<br>
+                    <h3 align="middle" class="text-justify">This is a place where you can get insights into any <b>medicine</b>, <b>disease</b> and <b>laboratory tests</b>, so that the user is able to know more about what the software detected.<br>
                     <br>
-                    <input type="text" name="query"><br>
+                    <br></h3>
+                    <h4>
+                    <div class="col-lg-4 col-lg-offset-4">
+                    <input align="middle" type="text" name="query"><br>
                     <br>
-                    <input type="radio" name="options" id="Medicine" value="Medicine"> Medicine </input><br>
+                    
+                    <input align="middle" type="radio" name="options" id="Medicine" value="Medicine"> Medicine </input><br>
                     <input type="radio" name="options" id="Disease" value="Disease"> Disease </input><br>
                     <input type="radio" name="options" id="LabTest" value="LabTest"> Lab Test </input><br>
+                    
+                    
+                    <br><br>
                     <input type="submit" class="button" value="Search">
                     </form>
+                </h4>
+                </div>
+                
                 </div>
             </div>
         </div>
