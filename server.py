@@ -93,7 +93,6 @@ def history():
     for i,idname in enumerate(idnames):
         temp={
             'id' : idname,
-            'patient_name' : 'Writwick Wraj',
             'original_filename' : uploadfiles[i],
             'output': resultfiles[i],
         }
