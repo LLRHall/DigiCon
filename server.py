@@ -2,7 +2,6 @@
 
 import glob
 import json
-import datetime
 import time
 import os
 import os.path
