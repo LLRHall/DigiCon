@@ -18,3 +18,5 @@ sudo pip3 --proxy=$PROXY install json2html
 sudo pip3 --proxy=$PROXY install fpdf
 sudo pip3 --proxy=$PROXY install pattern
 sudo -E apt-get install python3-opencv
+
+sudo pip3 install git+https://github.com/clips/pattern.git@development 
