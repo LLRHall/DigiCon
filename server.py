@@ -99,6 +99,9 @@ def insights():
     token = '71c4161312f0f36b120f80f4b015717bee72c4e337fc4800840786fa50102ccb'
     if request.method == 'POST':
         query = request.form['query']
+        if len(query)==0 or not query.isalnum():
+            return render_template('insights.html')
+
         r = requests.get(
             "http://www.healthos.co/api/v1/autocomplete/medicines/brands/" + query,
             headers={
