@@ -9,6 +9,7 @@ import os.path
 import threading
 import webbrowser
 import requests
+import datetime as DT
 from flask import Flask, render_template, session, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from json2html import *
@@ -17,9 +18,11 @@ from aws import aws_fileupload, aws_read, replace
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = CUR_DIR + '/static/files/uploads'
+RESULTS_FOLDER = CUR_DIR + '/static/files/results'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['RESULTS_FOLDER'] = RESULTS_FOLDER
 
 
 @app.route("/")
@@ -62,19 +65,30 @@ def processfile(filename):
 def history():
     kwargs = {}
 
-    files = glob.glob(UPLOAD_FOLDER.rstrip('uploads') + 'results/*')
+    files = glob.glob(RESULTS_FOLDER+'/*')
+    
+    resultfiles= []
+    idnames=[]
+    uploadfiles = []
     scans = []
+    
     for file in files:
-        print(time.ctime(os.path.getmtime(file)).strftime('%YYYY'))
-    # scans = [
-    #     {
-    #         'id' : '2018-03-17T17:40:42.907425',
-    #         'patient_name' : 'Writwick Wraj',
-    #         'original_filename' : 'static/assets/img/uploads/123.jpg',
-    #         'output': '/uploads/16737-FederationFormat.jpg',
-    #     },
-    # ]
+    	resultfiles.append(file.replace(CUR_DIR,""))
 
+    for file in resultfiles:
+    	uploadfiles.append(file.replace("results","uploads"))
+    
+    for file in files:
+    	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime).isoformat())
+    
+    for i,idname in enumerate(idnames):
+    	temp={
+    		'id' : idname,
+    		'patient_name' : 'Writwick Wraj',
+            'original_filename' : uploadfiles[i],
+            'output': resultfiles[i],
+    	}
+    	scans.append(temp)
 
     kwargs['scans'] = scans
     return render_template('history.html', **kwargs)
@@ -102,7 +116,7 @@ def insights():
                     del element['medicine_id']
                     del element['id']
                     del element['search_score']
-                # print (json.dumps(parsed, indent=4, sort_keys=True))
+
                 finaltable = json2html.convert(json=parsed).replace('>', '>\n')
 
                 f = open("templates/template.html", "r")
@@ -116,11 +130,6 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
-                # ans=""
-                # for x in contents:
-                #     ans+=x;
-                #     ans+='\n'
                 f = open("templates/new.html", "w")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
@@ -160,7 +169,6 @@ def insights():
                     del element['lab_test_id']
                     del element['id']
                     del element['search_score']
-                # print (json.dumps(parsed, indent=4, sort_keys=True))
                 finaltable = json2html.convert(json=parsed).replace('>', '>\n')
 
                 f = open("templates/template.html", "r")
@@ -174,11 +182,6 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
-                # ans=""
-                # for x in contents:
-                #     ans+=x;
-                #     ans+='\n'
                 f = open("templates/new.html", "w")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
@@ -217,7 +220,7 @@ def insights():
                     del element['disease_id']
                     del element['disease_cat']
                     del element['search_score']
-                # print (json.dumps(parsed, indent=4, sort_keys=True))
+
                 finaltable = json2html.convert(json=parsed).replace('>', '>\n')
 
                 f = open("templates/template.html", "r")
@@ -231,11 +234,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
-                # ans=""
-                # for x in contents:
-                #     ans+=x;
-                #     ans+='\n'
+
                 f = open("templates/new.html", "w")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
