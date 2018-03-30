@@ -18,6 +18,7 @@ UPLOAD_FOLDER = CUR_DIR + '/static/files/uploads'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -93,42 +94,68 @@ def history():
     kwargs['scans'] = scans
     return render_template('history.html', **kwargs)
 
-@app.route("/insights",methods=['GET', 'POST'])
+
+@app.route("/insights", methods=['GET', 'POST'])
 def insights():
     token = '71c4161312f0f36b120f80f4b015717bee72c4e337fc4800840786fa50102ccb'
     if request.method == 'POST':
         query = request.form['query']
-        r = requests.get("http://www.healthos.co/api/v1/autocomplete/medicines/brands/"+query,headers={'Authorization': 'Bearer '+token})
-        parsed = json.loads(r.content)
-        for element in parsed:
-            del element['medicine_id']
-            del element['id']
-            del element['search_score']
-        # print (json.dumps(parsed, indent=4, sort_keys=True))
-        f = open("templates/template.html", "r")
-        contents = f.readlines()
-        f.close()
-        cssname="""<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
-        contents.insert(39,json2html.convert(json = parsed))
-        contents.insert(27,cssname)
-        # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
-        # ans=""
-        # for x in contents:
-        #     ans+=x;
-        #     ans+='\n'
-        f = open("templates/new.html", "w")
-        contents = "".join(contents)
-        f.write(contents)
-        f.close()
+        r = requests.get(
+            "http://www.healthos.co/api/v1/autocomplete/medicines/brands/" + query,
+            headers={
+                'Authorization': 'Bearer ' + token})
 
-        # print(ans)
+        if len(
+                r.content) > 2:  # checking if the response has more than just two brackets []
+            parsed = json.loads(r.content)
+            for element in parsed:
+                del element['medicine_id']
+                del element['id']
+                del element['search_score']
+            # print (json.dumps(parsed, indent=4, sort_keys=True))
+            f = open("templates/template.html", "r")
+            contents = f.readlines()
+            f.close()
+            cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
+            contents.insert(27, cssname)
+            contents.insert(39, json2html.convert(json=parsed))
+            contents.insert(40,
+                            """
+                                <br><br>
+                                <a href="/insights" class="button">Search again</a>
+                            """)
+            # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
+            # ans=""
+            # for x in contents:
+            #     ans+=x;
+            #     ans+='\n'
+            f = open("templates/new.html", "w")
+            contents = "".join(contents)
+            f.write(contents)
+            f.close()
+        else:
+            f = open("templates/template.html", "r")
+            contents = f.readlines()
+            f.close()
+            contents.insert(39, "<b>Your query returned no results.</b>")
+            contents.insert(40,
+                            """
+                                <br><br>
+                                <a href="/insights" class="button">Search again</a>
+                            """)
+            f = open("templates/new.html", "w")
+            contents = "".join(contents)
+            f.write(contents)
+            f.close()
         return render_template('new.html')
     else:
         return render_template('insights.html')
 
+
 @app.route("/about")
 def about():
     return render_template('about.html')
+
 
 @app.route("/feedback")
 def feedback():
@@ -144,7 +171,6 @@ if __name__ == '__main__':
         """.format(url))
 
     if not app.debug:
-        threading.Timer(1.00, lambda: webbrowser.open(url) ).start()
+        threading.Timer(1.00, lambda: webbrowser.open(url)).start()
 
     app.run(port=port)
-
