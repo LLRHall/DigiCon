@@ -78,8 +78,8 @@ def history():
     	uploadfiles.append(file.replace("results","uploads"))
     
     for file in files:
-    	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime).isoformat())
-    
+    	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime+19800).isoformat())
+
     for i,idname in enumerate(idnames):
     	temp={
     		'id' : idname,
