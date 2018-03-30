@@ -1,7 +1,7 @@
 from boto3.s3.transfer import S3Transfer
 import boto3
-#have all the variables populated which are required below
 import os
+#have all the variables populated which are required below
 
 AWS_ACCESS_KEY_ID = 'AKIAJONJ4JMC5ZSSNAAQ'
 AWS_SECRET_ACCESS_KEY = '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'

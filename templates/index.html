@@ -5,7 +5,7 @@
 	<link rel="icon" type="image/png" href="/static/assets/img/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-	<title>$APPNAME by $TEAMNAME</title>
+	<title>DigiCon by TEAM 06</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -75,6 +75,7 @@
 
     </div>
 </div>
+{% include 'modal.html' %}
 
 
 </body>
@@ -114,9 +115,14 @@
             });
           };
         }
-
+        function openModal(src){
+            console.log("hello");
+            $('#imagepreview').attr('src', src); // here asign the image to the modal when the user click the enlarge link
+            $('#imagemodal').modal('show'); 
+        }
 
         $(document).ready(function(){
+            
             $(".drop").addClass("animated fadeIn")
             var drop = $(".drop");
             drop.on('dragenter', function (e) {
@@ -171,7 +177,7 @@
                                     <div class='card-body'>
                                         <div style='display: flex; align-items: center; ' >
                                             <div class='columns'>
-                                            <img class='thumb' src='{1}' title='{2}'/>
+                                            <img class='thumb' src='{1}' title='{2}' onclick="openModal('{1}')" style="cursor:pointer"/>
                                             </div>
                                             <div class='columns'>
                                             <img src='/static/assets/loader.svg' class='loader'/>
@@ -179,7 +185,7 @@
 
                                             </div>
                                             <div class='columns'>
-                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success"
+                                            <a target="_blank" href="/static/files/results/{2}.pdf" class="btn btn-sq-lg btn-success"
                                             style='visibility:hidden; background-color: #00FF00; border-color: black; color: black;'>
                                               <i class="fa fa-file-text"></i><br/>
                                               Download Results <br> Document
@@ -281,6 +287,7 @@
             // //     }
 
             // });
+
 
 
         });

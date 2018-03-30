@@ -15,7 +15,7 @@ def file_read(filename, UPLOAD_FOLDER):
 
     print('yolo bucket', bucket)
     response = client.detect_text(Image={'S3Object':{'Bucket':bucket,'Name':fileName}})
-    return json.dumps(response)
+    return response
     # print(json.dumps(response, indent=2))
 
     # print('Detected labels for ' + fileName)
