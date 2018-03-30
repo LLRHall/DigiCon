@@ -149,20 +149,26 @@
 
                 var progressBar = $(".progress-bar");
                 var progress = $(".progress");
+                var text = $(".progressBar pre")
                 setTimeout(function() {
+                    text.html("Uploading file...");
                     progressBar.css('width', '5%');
                     setTimeout(function() {
+                        text.html("File Uploaded. Gettings Text from the image...");
                         progressBar.css('width', '8%');
                         setTimeout(function() {
+                            text.html("Running trained Neural Network model on the OCR texts...");
                             progressBar.css('width', '15%');
                             setTimeout(function(){
+                                text.html("Running correction on detected Patient info and medicines...");
                                 progressBar.css('width', '25%');
                                 setTimeout(function(){
+                                    text.html("Compiling output document...");
                                     progressBar.css('width', '50%');
-                                    // $(".progressBar").delay(1000).slideUp();;
+
                                 }, 3000 );
-                            }, 1500 );
-                        }, 1000); // WAIT 2 seconds
+                            }, 4000 );
+                        }, 2000); // WAIT 2 seconds
                     }, 2000); // WAIT 1 seconds
                 }, 100); // WAIT 1 second
             }
