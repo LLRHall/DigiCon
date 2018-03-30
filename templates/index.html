@@ -41,31 +41,21 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                  <!--   <output id="list"></output>
-                    <form id="upload-file" method="post" enctype="multipart/form-data">
-                        <fieldset>
-                            <label for="file">Select Image(s)</label>
-                            <input name="file" type="file">
-                        </fieldset>
-                        <fieldset>
-                            <button id="upload-file-btn" type="button">Upload</button>
-                        </fieldset>
-                    </form> -->
 
                         <div class="col-md-1"></div>
                         <div class="col-md-10">
-                            <output id="list" class="box"></output>    
+                            <output id="list" class="box"></output>
                             <div class="drop">
                                 <div class="cont">
                                     <i class="fa fa-cloud-upload"></i>
                                     <div class="tit">
-                                        Drag & Drop
+                                        Select Images
                                     </div>
                                       <div class="desc">
-                                        your files to Assets, or
+                                        Upload medical prescription images
                                     </div>
                                     <div class="browse">
-                                        click here to browse
+                                        Browse Files
                                     </div>
                                 </div>
 
@@ -126,8 +116,6 @@
         }
 
 
-        $('#reloadbutton').hide()
-
         $(document).ready(function(){
             $(".drop").addClass("animated fadeIn")
             var drop = $(".drop");
@@ -168,7 +156,7 @@
                     // Closure to capture the file information.
                     reader.onload = (function(theFile) {
                         // file_ids[i] = md5(theFile.name);
-                        
+
                         // file_id = file_ids[i];
                         // setTimeout(() => {console.log("test")},3000);
                         return function(e) {
@@ -179,7 +167,7 @@
                             // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
                             var innerHTML = `
                                 <div class='card card1' id='{0}'>
-                                    
+
                                     <div class='card-body'>
                                         <div style='display: flex; align-items: center; ' >
                                             <div class='columns'>
@@ -187,11 +175,11 @@
                                             </div>
                                             <div class='columns'>
                                             <img src='/static/assets/loader.svg' class='loader'/>
-                                            <img src='/static/assets/processed.svg' class='processed' hidden=true/>
+                                            <img style='width:30%' src='/static/assets/processed.svg' class='processed' hidden=true/>
 
                                             </div>
                                             <div class='columns'>
-                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success" disabled>
+                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success" style='visibility:hidden'>
                                               <i class="fa fa-file-text"></i><br/>
                                               Download Results <br> Document
                                             </a>
