@@ -3,6 +3,7 @@
 import glob
 import json
 import time
+import hashlib
 import os
 import os.path
 import threading
@@ -46,6 +47,9 @@ def uploadfile():
             return redirect(request.url)
         if file:
             filename = secure_filename(file.filename)
+            h = hashlib.md5()
+            h.update(filename)
+            filename = h.hexdigest() + '.jpg'
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return ('success', 200)
 
@@ -73,12 +77,12 @@ def history():
     kwargs = {}
 
     files = glob.glob(RESULTS_FOLDER+'/*')
-    
+
     resultfiles= []
     idnames=[]
     uploadfiles = []
     scans = []
-    
+
     for file in files:
 
     	resultfiles.append(file.replace(CUR_DIR,""))
@@ -86,7 +90,7 @@ def history():
 
     for file in resultfiles:
     	uploadfiles.append(file.replace("results","uploads"))
-    
+
     for file in files:
     	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime+19800).isoformat())
 
@@ -100,7 +104,7 @@ def history():
     	scans.append(temp)
 
     kwargs['scans'] = scans
-    # 
+    #
     return render_template('history.html', **kwargs)
 
 
