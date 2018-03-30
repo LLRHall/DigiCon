@@ -179,7 +179,8 @@
 
                                             </div>
                                             <div class='columns'>
-                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success" style='visibility:hidden'>
+                                            <a download target="_blank" href="/static/files/results/{2}" class="btn btn-sq-lg btn-success"
+                                            style='visibility:hidden; background-color: #00FF00; border-color: black; color: black;'>
                                               <i class="fa fa-file-text"></i><br/>
                                               Download Results <br> Document
                                             </a>
@@ -232,6 +233,7 @@
                                     $("#"+file_id+" .loader").attr("hidden",true);
                                     $("#"+file_id+" .processed").removeAttr("hidden");
                                     $("#"+file_id+" .processed").removeAttr("disabled");
+                                    $("#"+file_id+" a").css("visibility", "visible");
 
                                 })
                             }
