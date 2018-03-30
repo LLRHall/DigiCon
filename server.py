@@ -87,7 +87,7 @@ def history():
     
     for file in files:
     	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime).isoformat())
-    
+    # print(idnames)
     for i,idname in enumerate(idnames):
     	temp={
     		'id' : idname,

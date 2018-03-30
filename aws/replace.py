@@ -4,6 +4,7 @@ import numpy as np
 import json
 import math
 import os
+from fpdf import FPDF
 
 def show_img(img):
 	cv2.imshow("img",img)
@@ -113,9 +114,6 @@ def replace(text,img):
 		# 	print("********************** not printing this *************************")
 	return img
 
-
-
-
 def main(aws_result_json, filename, UPLOAD_FOLDER):
 	abs_path_upload = os.path.join(UPLOAD_FOLDER, filename)
 	# text = read_json("./out.txt")
@@ -123,3 +121,8 @@ def main(aws_result_json, filename, UPLOAD_FOLDER):
 	replace(aws_result_json["TextDetections"],img)
 	RESULT_FOLDER = UPLOAD_FOLDER.rstrip('uploads') + 'results'
 	cv2.imwrite(os.path.join(RESULT_FOLDER, filename), img)
+	pdf = FPDF()
+	pdf.add_page()
+	x,y,w,h = 0,0,200,250
+	pdf.image(os.path.join(RESULT_FOLDER, filename), x,y,w,h)
+	pdf.output(os.path.join(RESULT_FOLDER, filename)+".pdf","F")

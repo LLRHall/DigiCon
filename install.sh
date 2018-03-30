@@ -20,3 +20,4 @@ sudo pip3 --proxy=$PROXY install fpdf
 sudo pip3 --proxy=$PROXY install pattern
 sudo -E apt-get install opencv-python
 sudo pip3 install git+https://github.com/clips/pattern.git@development 
+sudo pip3 install fpdf
