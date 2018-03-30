@@ -18,6 +18,8 @@ sudo pip3 --proxy=$PROXY install requests
 sudo pip3 --proxy=$PROXY install json2html
 sudo pip3 --proxy=$PROXY install fpdf
 sudo -E apt-get install opencv-python
+sudo apt-get install libmysqlclient-dev
 sudo pip3 install git+https://github.com/clips/pattern.git@development 
+sudo pip3 install scikit-image
 sudo pip3 install fpdf
 
