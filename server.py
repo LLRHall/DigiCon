@@ -113,12 +113,15 @@ def insights():
                 del element['id']
                 del element['search_score']
             # print (json.dumps(parsed, indent=4, sort_keys=True))
+            finaltable = json2html.convert(json=parsed).replace('>','>\n')
+
+
             f = open("templates/template.html", "r")
             contents = f.readlines()
             f.close()
             cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
             contents.insert(27, cssname)
-            contents.insert(39, json2html.convert(json=parsed))
+            contents.insert(39, finaltable)
             contents.insert(40,
                             """
                                 <br><br>
@@ -133,6 +136,13 @@ def insights():
             contents = "".join(contents)
             f.write(contents)
             f.close()
+
+
+            with open("templates/new.html", "r") as f:
+                for num, line in enumerate(f, 1):
+                    if num==39:
+                        newline="""<table class="table" border="1">"""
+                        line=newline
         else:
             f = open("templates/template.html", "r")
             contents = f.readlines()
