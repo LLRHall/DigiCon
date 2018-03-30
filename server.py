@@ -80,7 +80,9 @@ def history():
     scans = []
     
     for file in files:
+
     	resultfiles.append(file.replace(CUR_DIR,""))
+
 
     for file in resultfiles:
     	uploadfiles.append(file.replace("results","uploads"))
@@ -98,6 +100,7 @@ def history():
     	scans.append(temp)
 
     kwargs['scans'] = scans
+    # 
     return render_template('history.html', **kwargs)
 
 

@@ -75,6 +75,7 @@
 
     </div>
 </div>
+{% include 'modal.html' %}
 
 
 </body>
@@ -114,9 +115,14 @@
             });
           };
         }
-
+        function openModal(src){
+            console.log("hello");
+            $('#imagepreview').attr('src', src); // here asign the image to the modal when the user click the enlarge link
+            $('#imagemodal').modal('show'); 
+        }
 
         $(document).ready(function(){
+            
             $(".drop").addClass("animated fadeIn")
             var drop = $(".drop");
             drop.on('dragenter', function (e) {
@@ -171,7 +177,7 @@
                                     <div class='card-body'>
                                         <div style='display: flex; align-items: center; ' >
                                             <div class='columns'>
-                                            <img class='thumb' src='{1}' title='{2}'/>
+                                            <img class='thumb' src='{1}' title='{2}' onclick="openModal('{1}')" style="cursor:pointer"/>
                                             </div>
                                             <div class='columns'>
                                             <img src='/static/assets/loader.svg' class='loader'/>
@@ -281,6 +287,7 @@
             // //     }
 
             // });
+
 
 
         });
