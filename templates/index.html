@@ -118,11 +118,11 @@
         function openModal(src){
             console.log("hello");
             $('#imagepreview').attr('src', src); // here asign the image to the modal when the user click the enlarge link
-            $('#imagemodal').modal('show'); 
+            $('#imagemodal').modal('show');
         }
 
         $(document).ready(function(){
-            
+
             $(".drop").addClass("animated fadeIn")
             var drop = $(".drop");
             drop.on('dragenter', function (e) {
@@ -169,7 +169,7 @@
                             // Render thumbnail.
                             var div = document.createElement('div');
 
-                            file_id = md5(theFile.name);
+                            file_id = md5(md5(theFile.name) + '.jpg');
                             // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
                             var innerHTML = `
                                 <div class='card card1' id='{0}'>
@@ -232,7 +232,7 @@
                     success: function(data) {
                         if (data == 'success') {
                             for (var i = files.length - 1; i >= 0; i--) {
-                                $.get('/processfile/' + files[i].name, function(filename, status) {
+                                $.get('/processfile/' + md5(files[i].name) + '.jpg', function(filename, status) {
                                     console.log('Done with ', filename);
                                     var file_id = md5(filename);
                                     console.log(file_id+"    "+filename);
