@@ -17,4 +17,4 @@ sudo pip3 --proxy=$PROXY install boto3
 sudo pip3 --proxy=$PROXY install requests
 sudo pip3 --proxy=$PROXY install json2html
 sudo pip3 --proxy=$PROXY install fpdf
-sudo pip3 --proxy=$PROXY install pattern
+sudo pip3 --proxy=$PROXY install pattern3
