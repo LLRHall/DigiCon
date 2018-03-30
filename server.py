@@ -121,7 +121,7 @@ def insights():
                     'Authorization': 'Bearer ' + token})
             if len(
                     r.content) > 2:  # checking if the response has more than just two brackets []
-                parsed = json.loads(r.content)
+                parsed = json.loads(r.content.decode('utf-8'))
                 for element in parsed:
                     del element['medicine_id']
                     del element['id']
@@ -140,7 +140,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
@@ -160,7 +160,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
@@ -174,7 +174,7 @@ def insights():
                     'Authorization': 'Bearer ' + token})
             if len(
                     r.content) > 2:  # checking if the response has more than just two brackets []
-                parsed = json.loads(r.content)
+                parsed = json.loads(r.content.decode('utf-8'))
                 for element in parsed:
                     del element['lab_test_id']
                     del element['id']
@@ -192,7 +192,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
@@ -212,7 +212,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
@@ -225,7 +225,7 @@ def insights():
 
             if len(
                     r.content) > 2:  # checking if the response has more than just two brackets []
-                parsed = json.loads(r.content)
+                parsed = json.loads(r.content.decode('utf-8'))
                 for element in parsed:
                     del element['disease_id']
                     del element['disease_cat']
@@ -245,7 +245,7 @@ def insights():
                                     <a href="/insights" class="button">Search again</a>
                                 """)
 
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
@@ -265,7 +265,7 @@ def insights():
                                     <br><br>
                                     <a href="/insights" class="button">Search again</a>
                                 """)
-                f = open("templates/new.html", "w")
+                f = open("templates/new.html", "wb")
                 contents = "".join(contents)
                 f.write(contents.encode('utf-8'))
                 f.close()
