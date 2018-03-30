@@ -45,6 +45,7 @@ def uploadfile():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return ('success', 200)
 
+
 @app.route("/processfile/<filename>")
 def processfile(filename):
     try:
@@ -60,6 +61,7 @@ def processfile(filename):
 @app.route("/history")
 def history():
     kwargs = {}
+
     files = glob.glob(UPLOAD_FOLDER.rstrip('uploads') + 'results/*')
     scans = []
     for file in files:
@@ -83,67 +85,182 @@ def insights():
     token = '71c4161312f0f36b120f80f4b015717bee72c4e337fc4800840786fa50102ccb'
     if request.method == 'POST':
         query = request.form['query']
-        if len(query)==0 or not query.isalnum():
+        if len(query) == 0 or not query.isalnum():
             return render_template('insights.html')
+        option = request.form['options']
+        print(option)
+        if option == "Medicine":
+            print(query)
+            r = requests.get(
+                "http://www.healthos.co/api/v1/autocomplete/medicines/brands/" + query,
+                headers={
+                    'Authorization': 'Bearer ' + token})
+            if len(
+                    r.content) > 2:  # checking if the response has more than just two brackets []
+                parsed = json.loads(r.content)
+                for element in parsed:
+                    del element['medicine_id']
+                    del element['id']
+                    del element['search_score']
+                # print (json.dumps(parsed, indent=4, sort_keys=True))
+                finaltable = json2html.convert(json=parsed).replace('>', '>\n')
 
-        r = requests.get(
-            "http://www.healthos.co/api/v1/autocomplete/medicines/brands/" + query,
-            headers={
-                'Authorization': 'Bearer ' + token})
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
+                contents.insert(27, cssname)
+                contents.insert(39, finaltable)
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
+                # ans=""
+                # for x in contents:
+                #     ans+=x;
+                #     ans+='\n'
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
 
-        if len(
-                r.content) > 2:  # checking if the response has more than just two brackets []
-            parsed = json.loads(r.content)
-            for element in parsed:
-                del element['medicine_id']
-                del element['id']
-                del element['search_score']
-            # print (json.dumps(parsed, indent=4, sort_keys=True))
-            finaltable = json2html.convert(json=parsed).replace('>','>\n')
+                with open("templates/new.html", "r") as f:
+                    for num, line in enumerate(f, 1):
+                        if num == 39:
+                            newline = """<table class="table" border="1">"""
+                            line = newline
+            else:
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                contents.insert(39, "<b>Your query returned no results.</b>")
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
+            return render_template('new.html')
 
+        elif option == "LabTest":
+            print(query)
+            r = requests.get(
+                "http://www.healthos.co/api/v1/autocomplete/lab_tests/" + query,
+                headers={
+                    'Authorization': 'Bearer ' + token})
+            if len(
+                    r.content) > 2:  # checking if the response has more than just two brackets []
+                parsed = json.loads(r.content)
+                for element in parsed:
+                    del element['lab_test_id']
+                    del element['id']
+                    del element['search_score']
+                # print (json.dumps(parsed, indent=4, sort_keys=True))
+                finaltable = json2html.convert(json=parsed).replace('>', '>\n')
 
-            f = open("templates/template.html", "r")
-            contents = f.readlines()
-            f.close()
-            cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
-            contents.insert(27, cssname)
-            contents.insert(39, finaltable)
-            contents.insert(40,
-                            """
-                                <br><br>
-                                <a href="/insights" class="button">Search again</a>
-                            """)
-            # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
-            # ans=""
-            # for x in contents:
-            #     ans+=x;
-            #     ans+='\n'
-            f = open("templates/new.html", "w")
-            contents = "".join(contents)
-            f.write(contents)
-            f.close()
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
+                contents.insert(27, cssname)
+                contents.insert(39, finaltable)
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
+                # ans=""
+                # for x in contents:
+                #     ans+=x;
+                #     ans+='\n'
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
 
-
-            with open("templates/new.html", "r") as f:
-                for num, line in enumerate(f, 1):
-                    if num==39:
-                        newline="""<table class="table" border="1">"""
-                        line=newline
+                with open("templates/new.html", "r") as f:
+                    for num, line in enumerate(f, 1):
+                        if num == 39:
+                            newline = """<table class="table" border="1">"""
+                            line = newline
+            else:
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                contents.insert(39, "<b>Your query returned no results.</b>")
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
+            return render_template('new.html')
         else:
-            f = open("templates/template.html", "r")
-            contents = f.readlines()
-            f.close()
-            contents.insert(39, "<b>Your query returned no results.</b>")
-            contents.insert(40,
-                            """
-                                <br><br>
-                                <a href="/insights" class="button">Search again</a>
-                            """)
-            f = open("templates/new.html", "w")
-            contents = "".join(contents)
-            f.write(contents)
-            f.close()
-        return render_template('new.html')
+            r = requests.get(
+                "http://www.healthos.co/api/v1/autocomplete/diseases/" + query,
+                headers={
+                    'Authorization': 'Bearer ' + token})
+
+            if len(
+                    r.content) > 2:  # checking if the response has more than just two brackets []
+                parsed = json.loads(r.content)
+                for element in parsed:
+                    del element['disease_id']
+                    del element['disease_cat']
+                    del element['search_score']
+                # print (json.dumps(parsed, indent=4, sort_keys=True))
+                finaltable = json2html.convert(json=parsed).replace('>', '>\n')
+
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                cssname = """<link href="/static/assets/css/table.css" rel="stylesheet"/>"""
+                contents.insert(27, cssname)
+                contents.insert(39, finaltable)
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                # contents.insert(58,"""<script src="/static/assets/js/table.js"></script>""")
+                # ans=""
+                # for x in contents:
+                #     ans+=x;
+                #     ans+='\n'
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
+
+                with open("templates/new.html", "r") as f:
+                    for num, line in enumerate(f, 1):
+                        if num == 39:
+                            newline = """<table class="table" border="1">"""
+                            line = newline
+            else:
+                f = open("templates/template.html", "r")
+                contents = f.readlines()
+                f.close()
+                contents.insert(39, "<b>Your query returned no results.</b>")
+                contents.insert(40,
+                                """
+                                    <br><br>
+                                    <a href="/insights" class="button">Search again</a>
+                                """)
+                f = open("templates/new.html", "w")
+                contents = "".join(contents)
+                f.write(contents.encode('utf-8'))
+                f.close()
+            return render_template('new.html')
     else:
         return render_template('insights.html')
 
