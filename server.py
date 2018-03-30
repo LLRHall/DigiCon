@@ -80,24 +80,23 @@ def history():
     scans = []
     
     for file in files:
-
-    	resultfiles.append(file.replace(CUR_DIR,""))
+        resultfiles.append(file.replace(CUR_DIR,""))
 
 
     for file in resultfiles:
-    	uploadfiles.append(file.replace("results","uploads"))
+        uploadfiles.append(file.replace("results","uploads"))
     
     for file in files:
-    	idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime+19800).isoformat())
+        idnames.append(DT.datetime.utcfromtimestamp(os.stat(file).st_mtime+19800).isoformat())
 
     for i,idname in enumerate(idnames):
-    	temp={
-    		'id' : idname,
-    		'patient_name' : 'Writwick Wraj',
+        temp={
+            'id' : idname,
+            'patient_name' : 'Writwick Wraj',
             'original_filename' : uploadfiles[i],
             'output': resultfiles[i],
-    	}
-    	scans.append(temp)
+        }
+        scans.append(temp)
 
     kwargs['scans'] = scans
     # 
@@ -279,9 +278,40 @@ def about():
     return render_template('about.html')
 
 
-@app.route("/feedback")
+@app.route("/feedback",methods=['GET', 'POST'])
 def feedback():
-    return render_template('feedback.html')
+    if request.method == 'POST':
+        name = request.form['Name']
+        email = request.form['email']
+        idnum = request.form['idnum']
+        phone = request.form['phone']
+        feedbacktext = request.form['feedbacktext']
+        f = open("feedbacks/"+name+".txt", "wb")
+        f.write(("Name ->"+name+'\n').encode('utf-8'))
+        f.write(("email ->"+email+'\n').encode('utf-8'))
+        f.write(("Id ->"+idnum+'\n').encode('utf-8'))
+        f.write(("phone ->"+phone+'\n').encode('utf-8'))
+        f.write(("Feedback ->"+feedbacktext+'\n').encode('utf-8'))
+        f.close()
+
+        f = open("templates/template.html", "r")
+        contents = f.readlines()
+        f.close()
+        contents.insert(39, "<h3>Your response was captured and saved to the Feedback folder.</h3>")
+        contents.insert(40,
+                        """
+                            <br><br>
+                            <a href="/" class="button">Return to home.</a>
+                        """)
+
+        f = open("templates/feedbackdone.html", "wb")
+        contents = "".join(contents)
+        f.write(contents.encode('utf-8'))
+        f.close()
+
+        return render_template('feedbackdone.html')
+    else:
+        return render_template('feedback.html')
 
 
 if __name__ == '__main__':
