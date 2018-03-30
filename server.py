@@ -1,8 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+import glob
 import json
 import datetime
+import time
 import os
+import os.path
 import threading
 import webbrowser
 import requests
@@ -57,38 +60,19 @@ def processfile(filename):
 @app.route("/history")
 def history():
     kwargs = {}
-    scans = [
-        {
-            'id' : '2018-03-17T17:40:42.907425',
-            'patient_name' : 'Writwick Wraj',
-            'original_filename' : 'static/assets/img/uploads/123.jpg',
-            'output': '/uploads/16737-FederationFormat.jpg',
-        },
-        {
-            'id' : '2018-03-17T17:40:42.907425',
-            'patient_name' : 'Writwick Wraj',
-            'original_filename' : 'static/assets/img/uploads/123.jpg',
-            'output': '/uploads/16737-FederationFormat.jpg',
-        },
-        {
-            'id' : '2018-03-17T17:40:42.907425',
-            'patient_name' : 'Writwick Wraj',
-            'original_filename' : 'static/assets/img/uploads/123.jpg',
-            'output': '/uploads/16737-FederationFormat.jpg',
-        },
-        {
-            'id' : '2018-03-17T17:40:42.907425',
-            'patient_name' : 'Writwick Wraj',
-            'original_filename' : 'static/assets/img/uploads/123.jpg',
-            'output': '/uploads/16737-FederationFormat.jpg',
-        },
-        {
-            'id' : '2018-03-17T17:40:42.907425',
-            'patient_name' : 'Writwick Wraj',
-            'original_filename' : 'static/assets/img/uploads/123.jpg',
-            'output': '/uploads/16737-FederationFormat.jpg',
-        },
-    ]
+    files = glob.glob(UPLOAD_FOLDER.rstrip('uploads') + 'results/*')
+    scans = []
+    for file in files:
+        print(time.ctime(os.path.getmtime(file)).strftime('%YYYY'))
+    # scans = [
+    #     {
+    #         'id' : '2018-03-17T17:40:42.907425',
+    #         'patient_name' : 'Writwick Wraj',
+    #         'original_filename' : 'static/assets/img/uploads/123.jpg',
+    #         'output': '/uploads/16737-FederationFormat.jpg',
+    #     },
+    # ]
+
 
     kwargs['scans'] = scans
     return render_template('history.html', **kwargs)
