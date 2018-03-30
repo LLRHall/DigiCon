@@ -12,5 +12,9 @@ sudo -E apt-get install python3-dev -y
 sudo -E apt-get install python3-setuptools -y
 sudo -E apt-get install python3-pip -y
 sudo pip3 --proxy=$PROXY install flask
+sudo pip3 --proxy=$PROXY install opencv-python
 sudo pip3 --proxy=$PROXY install boto3
-sudo -E apt-get install python3-opencv
+sudo pip3 --proxy=$PROXY install requests
+sudo pip3 --proxy=$PROXY install json2html
+sudo pip3 --proxy=$PROXY install fpdf
+sudo pip3 --proxy=$PROXY install pattern3
