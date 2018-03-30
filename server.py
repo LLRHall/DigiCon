@@ -47,9 +47,6 @@ def uploadfile():
             return redirect(request.url)
         if file:
             filename = secure_filename(file.filename)
-            h = hashlib.md5()
-            h.update(filename)
-            filename = h.hexdigest() + '.jpg'
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return ('success', 200)
 
@@ -103,7 +100,7 @@ def history():
         scans.append(temp)
 
     kwargs['scans'] = scans
-    #
+    
     return render_template('history.html', **kwargs)
 
 

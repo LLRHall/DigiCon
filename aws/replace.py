@@ -5,6 +5,7 @@ import json
 import math
 import os
 from fpdf import FPDF
+from aws import medical_report , txt2img , name_find
 
 def show_img(img):
 	cv2.imshow("img",img)
@@ -107,7 +108,7 @@ def replace(text,img):
 		ratio = counter2/counter1
 		# print(counter2, counter1)
 		# print(ratio)
-		if flag or ratio <= 0.5:
+		if flag or ratio <= 0.2:
 			img[cur_y_min:cur_y_max,cur_x_min:cur_x_max] = cv2.resize(cur_region,(cur_x_max-cur_x_min,cur_y_max-cur_y_min))
 			# show_img(img)
 		# else :
@@ -124,5 +125,32 @@ def main(aws_result_json, filename, UPLOAD_FOLDER):
 	pdf = FPDF()
 	pdf.add_page()
 	x,y,w,h = 0,0,200,250
+	pdf.image(os.path.join(UPLOAD_FOLDER, filename), x,y,w,h)
+
+	pdf.add_page()
+	x,y,w,h = 0,0,200,250
 	pdf.image(os.path.join(RESULT_FOLDER, filename), x,y,w,h)
+
+	#adding name address to the pdf
+	name , address = name_find.get_details(aws_result_json)
+	personal_details = []
+	personal_details.append("******** Patient Details ******* ") 
+	personal_details.append("Name : "+ name) 
+	personal_details.append("Address : " + address)
+
+	txt2img.list_to_png(personal_details,RESULT_FOLDER,'/personal_details.png')
+	pdf.add_page()
+	x,y,w,h = 0,0,200,250
+	pdf.image(os.path.join(RESULT_FOLDER, 'personal_details.png'), x,y,w,h)
+
+	#adding the reports to the pdf
+	report = ["***** Prescription Details ******* "]
+	report = report+medical_report.medical_report(aws_result_json, abs_path_upload)
+	# print(report)
+	txt2img.list_to_png(report,RESULT_FOLDER, '/report.png')
+	pdf.add_page()
+	x,y,w,h = 0,0,200,250
+	pdf.image(os.path.join(RESULT_FOLDER, 'report.png'), x,y,w,h)
+	
+
 	pdf.output(os.path.join(RESULT_FOLDER, filename)+".pdf","F")

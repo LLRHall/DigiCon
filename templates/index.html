@@ -169,7 +169,7 @@
                             // Render thumbnail.
                             var div = document.createElement('div');
 
-                            file_id = md5(md5(theFile.name) + '.jpg');
+                            file_id = md5(theFile.name);
                             // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
                             var innerHTML = `
                                 <div class='card card1' id='{0}'>
@@ -232,7 +232,7 @@
                     success: function(data) {
                         if (data == 'success') {
                             for (var i = files.length - 1; i >= 0; i--) {
-                                $.get('/processfile/' + md5(files[i].name) + '.jpg', function(filename, status) {
+                                $.get('/processfile/' + files[i].name, function(filename, status) {
                                     console.log('Done with ', filename);
                                     var file_id = md5(filename);
                                     console.log(file_id+"    "+filename);
