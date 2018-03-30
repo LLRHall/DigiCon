@@ -143,6 +143,31 @@
                 });
             });
 
+            var i = 0;
+
+            function countNumbers(){
+
+                var progressBar = $(".progress-bar");
+                var progress = $(".progress");
+                setTimeout(function() {
+                    progressBar.css('width', '5%');
+                    setTimeout(function() {
+                        progressBar.css('width', '8%');
+                        setTimeout(function() {
+                            progressBar.css('width', '15%');
+                            setTimeout(function(){
+                                progressBar.css('width', '25%');
+                                setTimeout(function(){
+                                    progressBar.css('width', '50%');
+                                    // $(".progressBar").delay(1000).slideUp();;
+                                }, 3000 );
+                            }, 1500 );
+                        }, 1000); // WAIT 2 seconds
+                    }, 2000); // WAIT 1 seconds
+                }, 100); // WAIT 1 second
+            }
+
+
 
 
             function handleFileSelect(evt) {
@@ -168,7 +193,7 @@
                         return function(e) {
                             // Render thumbnail.
                             var div = document.createElement('div');
-
+                            
                             file_id = md5(theFile.name);
                             // var filename = theFilen.ame.substring(0, data.lastIndexOf('.'));
                             var innerHTML = `
@@ -194,12 +219,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="progressBar" id="progress{0}">
+                                    <pre>Sending file to the server...</pre>
+                                    <div class="progress">
+                                        <div id="progress-bar{0}" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ></div>
+                                    </div>
+                                </div>
                             `
 
                             div.innerHTML = innerHTML.format(file_id, e.target.result, escape(theFile.name))
 
                             document.getElementById('list').insertBefore(div, null);
-
+                            countNumbers();
                         };
 
 
@@ -232,6 +263,7 @@
                     success: function(data) {
                         if (data == 'success') {
                             for (var i = files.length - 1; i >= 0; i--) {
+                                countNumbers(md5(files[i].name));                         
                                 $.get('/processfile/' + files[i].name, function(filename, status) {
                                     console.log('Done with ', filename);
                                     var file_id = md5(filename);
@@ -240,8 +272,16 @@
                                     $("#"+file_id+" .processed").removeAttr("hidden");
                                     $("#"+file_id+" .processed").removeAttr("disabled");
                                     $("#"+file_id+" a").css("visibility", "visible");
+                                    var progress = $("#progress"+file_id);
+                                    var progressBar = $("#progress-bar"+file_id);
+                                    progressBar.css('width', '70%');
+                                    progressBar.delay(500).css('width', '90%');
+                                    progressBar.delay(500).css('width', '100%');
+
+                                    progress.slideUp();
 
                                 })
+
                             }
                         } else {
                             alert('Error in file upload. Please try again!');
@@ -259,34 +299,6 @@
 
             $('#files').change(handleFileSelect);
 
-            // // $('#upload-file-btn').click(function() {
-            // //         // Loop through the FileList and render image files as thumbnails.
-            // //     for (var i = 0, f; f = $('#upload-file')[i]; i++) {
-
-            // //         // var filename = $('#upload-file').val().split('\\').pop();
-            // //         var form_data = new FormData($('#upload-file')[i]);
-            // //         // console.log(form_data.name);
-            // //         var span = document.createElement('span');
-            // // //                 span.innerHTML = ['<div class="row"><img class="thumb" src="', e.target.result,
-            // // //                         '" title="', escape(theFile.name), '"/></div>'].join('');
-            // // //                 document.getElementById('list').insertBefore(span, null);
-            // //         $.ajax({
-            // //             type: 'POST',
-            // //             url: '/uploadfile',
-            // //             data: form_data,
-            // //             contentType: false,
-            // //             cache: false,
-            // //             processData: false,
-            // //             async: false,
-            // //             success: function(data) {
-            // //                 console.log(data);
-            // //                 filename = data.substring(0, data.lastIndexOf('.'));
-            // //                 alert('file '+ filename + ' uploaded')
-            // //             },
-            // //         });
-            // //     }
-
-            // });
 
 
 

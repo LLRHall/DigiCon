@@ -15,7 +15,7 @@ from json2html import *
 
 import traceback
 from aws import aws_fileupload, aws_read, replace
-from nlp import correct_json
+# from nlp import correct_json
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = CUR_DIR + '/static/files/uploads'
@@ -52,20 +52,23 @@ def uploadfile():
 
 @app.route("/processfile/<filename>")
 def processfile(filename):
-    print("begin")
-    try:
-        aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
-        print("uploaded")
-        aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
-        print ("start")
-        corrected_result = correct_json.main(aws_result)
-        print ("end")
-        replace.main(json.loads(corrected_result), filename, UPLOAD_FOLDER)
-        return (filename, 200)
-    except Exception as e:
-        print(e)
-        traceback.print_exc()
-        return (filename, 500)
+    import time
+    time.sleep(10)
+    return (filename, 200)
+    # print("begin")
+    # try:
+    #     aws_fileupload.file_upload(filename, UPLOAD_FOLDER)
+    #     print("uploaded")
+    #     aws_result = aws_read.file_read(filename, UPLOAD_FOLDER)
+    #     print ("start")
+    #     corrected_result = correct_json.main(aws_result)
+    #     print ("end")
+    #     replace.main(json.loads(corrected_result), filename, UPLOAD_FOLDER)
+    #     return (filename, 200)
+    # except Exception as e:
+    #     print(e)
+    #     traceback.print_exc()
+    #     return (filename, 500)
 
 
 @app.route("/history")
